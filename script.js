@@ -56,9 +56,9 @@ const user = {
 }
 const comp = {
     x :  canvas.width - 15,
-    y : (canvas.height/2)-50,
+    y : 0,
     width : 15,
-    height : 150,
+    height : canvas.height,
     color : "White",
     score : 0,
 }
@@ -89,7 +89,6 @@ function update(){
     }
     //computerLevel is difficult, higher=harder, 
     let computerLevel = 0.08
-    comp.y += (ball.y - (comp.y + comp.height/2)) * computerLevel
     // this is saying if (ball.x < canvas.width/2 (on the right side)){ paddle = user} else {paddle = comp}
     let paddle = (ball.x < canvas.width/2) ? user : comp;
     if( collision(ball,paddle) ){
