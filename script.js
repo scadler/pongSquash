@@ -38,7 +38,7 @@ function collision(ball, paddle){
 function resetBall(){
     ball.x = canvas.width/2;
     ball.y = canvas.height/2;
-    ball.speed = 7;
+    ball.speed = 10;
     ball.velocityX = -ball.velocityX
 }
 function movePaddle(event){
@@ -62,6 +62,22 @@ const comp = {
     color : "White",
     score : 0,
 }
+const compN = {
+    x : 15,
+    y : 0,
+    width : canvas.width-15,
+    height : 15,
+    color : "White",
+    score : 0,
+}
+const compS = {
+    x : 15,
+    y : 585,
+    width : canvas.width-15,
+    height : 15,
+    color : "White",
+    score : 0,
+}
 const net = {
     x : canvas.width/2 - 2/2,
     y : 0,
@@ -73,7 +89,7 @@ const ball = {
     x : canvas.width/2,
     y : canvas.height/2,
     radius : 15,
-    speed : 7,
+    speed : 10,
     velocityX : 7,
     velocityY : 7,
     color : "White",
@@ -83,12 +99,14 @@ const framesPerSecond = 50;
 function update(){
     ball.x += ball.velocityX;
     ball.y += ball.velocityY;
-    if( ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0){
+    if( ball.y + ball.radius > canvas.height-15 || ball.y - ball.radius < 15){
         //ball has hit top or bottom
+        ball.speed += 0.4;
         ball.velocityY = - ball.velocityY;
     }
     //computerLevel is difficult, higher=harder, 
-    let computerLevel = 0.08
+    // let computerLevel = 0.08
+    //comp.y += (ball.y - (comp.y + comp.height/2)) * computerLevel
     // this is saying if (ball.x < canvas.width/2 (on the right side)){ paddle = user} else {paddle = comp}
     let paddle = (ball.x < canvas.width/2) ? user : comp;
     if( collision(ball,paddle) ){
@@ -101,13 +119,13 @@ function update(){
         ball.velocityX = direction * ball.speed * Math.cos(angleRadian)
         ball.velocityY = direction * ball.speed * Math.sin(angleRadian)
         //the ball moves faster every rebound
-        ball.speed += 0.2;
+        ball.speed += 0.4;
+        if(paddle === user){
+            user.score++;
+        }
     }
     if(ball.x - ball.radius < 0){
         comp.score++;
-        resetBall();
-    }else if(ball.x + ball.radius > canvas.width){
-        user.score++;
         resetBall();
     }
 }
@@ -119,6 +137,8 @@ drawNet();
 //user & comp paddles
 drawRect(user.x, user.y, user.width, user.height, user.color);
 drawRect(comp.x, comp.y, comp.width, comp.height, comp.color);
+drawRect(compN.x, compN.y, compN.width, compN.height, compN.color)
+drawRect(compS.x, compS.y, compS.width, compS.height, compS.color)
 //ball
 drawCircle(ball.x, ball.y, ball.radius, ball.color)
 }
